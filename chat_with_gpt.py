@@ -1,22 +1,26 @@
 import os
-from dotenv import load_dotenv
 from openai import OpenAI
+from dotenv import load_dotenv
 
-# .envからAPIキーを読み込む
+# .env ファイルから環境変数を読み込む
 load_dotenv()
-api_key = os.getenv("OPENAI_API_KEY")
 
-# OpenAIクライアントを作成
-client = OpenAI(api_key=api_key)
+# APIキーを環境変数から取得してクライアントを初期化
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# ChatGPTに問い合わせ（GPT-4oモデル使用）
-response = client.chat.completions.create(
-    model="gpt-4o",
-    messages=[
-        {"role": "system", "content": "あなたは明るく元気なVTuberのAIキャラクターです。"},
-        {"role": "user", "content": "こんにちは！今日のおすすめトピックは？"}
-    ]
-)
+def get_response(prompt):
+    response = client.chat.completions.create(
+        model="gpt-4o",  # 他に gpt-4-turbo や gpt-3.5-turbo も可
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response.choices[0].message.content.strip()
 
-# 応答を表示
-print(response.choices[0].message.content)
+if __name__ == "__main__":
+    prompt = input("ユーザーの発言: ")
+    reply = get_response(prompt)
+
+    # OBSで表示する用のテキストファイルに書き出す
+    with open("chat_output.txt", "w", encoding="utf-8") as f:
+        f.write(reply)
+
+    print("ChatGPTの返答:", reply)
