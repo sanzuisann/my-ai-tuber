@@ -3,6 +3,8 @@ from speak_with_voicevox import speak_with_voicevox
 
 def chat_and_speak(prompt: str):
     response = get_response(prompt)
+    with open("chat_output.txt", "w", encoding="utf-8") as f:
+        f.write(response)
     print("ChatGPT:", response)
     speak_with_voicevox(response)
 
