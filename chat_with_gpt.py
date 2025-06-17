@@ -25,6 +25,12 @@ def set_system_prompt(prompt: str) -> None:
     _conversation_history.clear()
 
 
+def clear_history() -> None:
+    """Remove all stored conversation history."""
+
+    _conversation_history.clear()
+
+
 def _build_messages(user_prompt: str) -> List[Dict[str, str]]:
     """Return the messages list to send to the OpenAI API."""
 
