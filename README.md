@@ -20,4 +20,7 @@ Run the main script:
 ```bash
 python main.py
 ```
-Then type your prompt. The reply from ChatGPT will be spoken aloud.
+You'll be prompted for an optional system prompt when the script starts.
+After that, type your prompt. The last 10 messages are kept as context and
+the reply from ChatGPT will be spoken aloud. Each response is limited to
+200 tokens.
