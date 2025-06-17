@@ -1,4 +1,4 @@
-from chat_with_gpt import get_response
+from chat_with_gpt import get_response, set_system_prompt
 from speak_with_voicevox import speak_with_voicevox
 
 def chat_and_speak(prompt: str):
@@ -9,6 +9,10 @@ def chat_and_speak(prompt: str):
     speak_with_voicevox(response)
 
 if __name__ == "__main__":
+    system_prompt = input("システムプロンプトを入力してください (空でスキップ): ")
+    if system_prompt:
+        set_system_prompt(system_prompt)
+
     while True:
         user_input = input("あなた: ")
         if user_input.lower() in {"exit", "quit"}:
