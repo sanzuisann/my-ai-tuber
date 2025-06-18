@@ -31,3 +31,11 @@ After that, type your prompt. The last 10 messages are kept as context and
 the reply from ChatGPT will be spoken aloud. Each response is limited to
 200 tokens.
 Responses will also appear sequentially in OBS.
+The ``update_obs_text`` utility in ``obs_utils.py`` can be used independently
+to set the ``ChatText`` source from other scripts:
+
+```python
+from obs_utils import update_obs_text
+
+update_obs_text("Hello OBS!")
+```
