@@ -1,5 +1,5 @@
 import os
-from chat_with_gpt import get_response, set_system_prompt
+from chat_with_gpt import get_response, set_system_prompt, reset_history
 from speak_with_voicevox import speak_with_voicevox
 
 # system_prompt.txt が存在する場合は内容をシステムプロンプトとして設定
@@ -23,6 +23,11 @@ if __name__ == "__main__":
 
     while True:
         user_input = input("あなた: ")
-        if user_input.lower() in {"exit", "quit"}:
+        lowered = user_input.lower()
+        if lowered in {"exit", "quit"}:
             break
+        if lowered == "!reset":
+            reset_history()
+            print("[履歴をリセットしました]")
+            continue
         chat_and_speak(user_input)
