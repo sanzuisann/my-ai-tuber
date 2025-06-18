@@ -1,6 +1,8 @@
 import os
+import time
 from chat_with_gpt import get_response, set_system_prompt, reset_history
 from speak_with_voicevox import speak_with_voicevox
+from obsws_python import obsws, requests
 
 # system_prompt.txt が存在する場合は内容をシステムプロンプトとして設定
 if os.path.exists("system_prompt.txt"):
@@ -9,11 +11,37 @@ if os.path.exists("system_prompt.txt"):
         if file_prompt:
             set_system_prompt(file_prompt)
 
+
+def update_obs(text: str) -> None:
+    """Update the ``ChatText`` source in OBS with ``text``."""
+
+    try:
+        ws = obsws("localhost", 4455, "yuki123")
+        ws.connect()
+        ws.call(
+            requests.SetInputSettings(
+                inputName="ChatText",
+                inputSettings={"text": text},
+                overlay=False,
+            )
+        )
+        ws.disconnect()
+    except Exception as e:  # pragma: no cover - OBS may not be running
+        print(f"[OBS ERROR] {e}")
+
 def chat_and_speak(prompt: str):
     response = get_response(prompt)
     with open("chat_output.txt", "w", encoding="utf-8") as f:
         f.write(response)
     print("ChatGPT:", response)
+
+    # show typing effect in OBS
+    typed = ""
+    for ch in response:
+        typed += ch
+        update_obs(typed)
+        time.sleep(0.05)
+
     speak_with_voicevox(response)
 
 if __name__ == "__main__":
