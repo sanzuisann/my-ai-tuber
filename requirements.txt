@@ -3,3 +3,4 @@ python-dotenv
 requests
 soundfile
 simpleaudio
+obsws-python
