@@ -16,6 +16,9 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 _system_prompt: str = ""
 _conversation_history: List[Dict[str, str]] = []
 
+# store the last 10 user/assistant pairs (20 messages)
+_MAX_HISTORY_PAIRS = 10
+
 
 def set_system_prompt(prompt: str) -> None:
     """Set the system prompt and clear conversation history."""
@@ -25,26 +28,47 @@ def set_system_prompt(prompt: str) -> None:
     _conversation_history.clear()
 
 
+def reset_history() -> None:
+    """Clear only the conversation history."""
+
+    _conversation_history.clear()
+
+
 def _build_messages(user_prompt: str) -> List[Dict[str, str]]:
     """Return the messages list to send to the OpenAI API."""
 
-    messages: List[Dict[str, str]] = []
-    if _system_prompt:
-        messages.append({"role": "system", "content": _system_prompt})
+    def _format_history() -> str:
+        lines = []
+        for msg in _conversation_history[-_MAX_HISTORY_PAIRS * 2:]:
+            prefix = "ユーザー" if msg["role"] == "user" else "AI"
+            lines.append(f"{prefix}: {msg['content']}")
+        return "\n".join(lines)
 
-    # Keep only the last 10 messages (combined user and assistant)
-    messages.extend(_conversation_history[-10:])
+    # Build system prompt with formatted history
+    system_prompt = _system_prompt
+    history_text = _format_history()
+    if history_text:
+        if system_prompt:
+            system_prompt += "\n"
+        system_prompt += (
+            "あなたとこれまでの会話（直近10件）：\n" + history_text
+        )
+
+    messages: List[Dict[str, str]] = []
+    if system_prompt:
+        messages.append({"role": "system", "content": system_prompt})
     messages.append({"role": "user", "content": user_prompt})
     return messages
 
 
 def _update_history(user_prompt: str, assistant_reply: str) -> None:
-    """Append the latest conversation turn and trim to 10 messages."""
+    """Append the latest conversation turn and trim to ``_MAX_HISTORY_PAIRS``."""
 
     _conversation_history.append({"role": "user", "content": user_prompt})
     _conversation_history.append({"role": "assistant", "content": assistant_reply})
-    if len(_conversation_history) > 10:
-        del _conversation_history[:-10]
+    max_messages = _MAX_HISTORY_PAIRS * 2
+    if len(_conversation_history) > max_messages:
+        del _conversation_history[:-max_messages]
 
 
 def get_response(prompt: str) -> str:
