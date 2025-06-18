@@ -20,7 +20,10 @@ Run the main script:
 ```bash
 python main.py
 ```
-You'll be prompted for an optional system prompt when the script starts.
+If a `system_prompt.txt` file exists in the repository root, its contents will
+be used as the system prompt automatically. You'll still be prompted for an
+optional system prompt when the script starts, which can override the file
+contents.
 After that, type your prompt. The last 10 messages are kept as context and
 the reply from ChatGPT will be spoken aloud. Each response is limited to
 200 tokens.
