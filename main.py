@@ -26,12 +26,12 @@ def show_typing_effect(text: str) -> None:
                 pass
             time.sleep(0.05)
 
+
 def chat_and_speak(prompt: str):
     response = get_response(prompt)
     print("ChatGPT:", response)
 
     # Show typing effect and update chat_output.txt
-    show_typing_effect(response)
 
     # After the whole text is written start speaking
     speak_with_voicevox(response)
