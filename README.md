@@ -28,3 +28,14 @@ After that, type your prompt. The last 10 messages are kept as context and
 the reply from ChatGPT will be spoken aloud. Each response is limited to
 200 tokens.
 
+### Adjusting speaking speed
+
+You can change how fast the audio is spoken by passing a ``speed`` value to
+``speak_with_voicevox``. For example, ``speed=1.2`` will speak about 20% faster:
+
+```python
+from speak_with_voicevox import speak_with_voicevox
+
+speak_with_voicevox("こんにちは", speed=1.2)
+```
+

@@ -27,23 +27,6 @@ def show_typing_effect(text: str) -> None:
             time.sleep(0.05)
 
 
-def show_typing_effect_in_obs(text: str) -> None:
-    """Write ``text`` to ``chat_output.txt`` one character at a time and
-    update the ``ChatText`` source in OBS to simulate typing."""
-
-    typed = ""
-    with open("chat_output.txt", "w", encoding="utf-8") as f:
-        for ch in text:
-            typed += ch
-            f.write(ch)
-            f.flush()
-            try:
-                os.fsync(f.fileno())
-            except OSError:
-                pass
-            _update_obs_typing(typed)
-            time.sleep(0.05)
-
 def chat_and_speak(prompt: str):
     response = get_response(prompt)
     print("ChatGPT:", response)
