@@ -39,3 +39,12 @@ from speak_with_voicevox import speak_with_voicevox
 speak_with_voicevox("こんにちは", speed=1.2)
 ```
 
+
+### Selecting a voice
+
+Each VOICEVOX voice is identified by a `speaker_id`. Pass this value to
+`speak_with_voicevox` to choose which speaker to use:
+
+```python
+speak_with_voicevox("text", speaker_id=8)
+```
