@@ -3,6 +3,7 @@ import time
 import argparse
 from chat_with_gpt import get_response, set_system_prompt, reset_history
 from speak_with_voicevox import speak_with_voicevox
+from chat_log import append_chat_to_log
 
 # system_prompt.txt が存在する場合は内容をシステムプロンプトとして設定
 if os.path.exists("system_prompt.txt"):
@@ -39,7 +40,9 @@ def chat_and_speak(prompt: str, *, speaker: int = 1, speed: float | None = None)
         Optional speed scale forwarded to :func:`speak_with_voicevox`.
     """
 
+    append_chat_to_log("user", prompt)
     response = get_response(prompt)
+    append_chat_to_log("bot", response)
     print("ChatGPT:", response)
 
     # Show typing effect and update chat_output.txt
