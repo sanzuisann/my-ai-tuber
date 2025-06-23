@@ -1,5 +1,6 @@
 import os
 import time
+import argparse
 from chat_with_gpt import get_response, set_system_prompt, reset_history
 from speak_with_voicevox import speak_with_voicevox
 
@@ -27,7 +28,19 @@ def show_typing_effect(text: str) -> None:
             time.sleep(0.05)
 
 
-def chat_and_speak(prompt: str):
+def chat_and_speak(prompt: str, *, speaker: int = 1, speed: float | None = None) -> None:
+    """Send ``prompt`` to ChatGPT and speak the reply.
+
+    Parameters
+    ----------
+    prompt:
+        The user prompt to send to ChatGPT.
+    speaker:
+        VOICEVOX speaker ID passed to :func:`speak_with_voicevox`.
+    speed:
+        Optional speed scale forwarded to :func:`speak_with_voicevox`.
+    """
+
     response = get_response(prompt)
     print("ChatGPT:", response)
 
@@ -36,9 +49,26 @@ def chat_and_speak(prompt: str):
     show_typing_effect(response)
 
     # After the whole text is written start speaking
-    speak_with_voicevox(response)
+    speak_with_voicevox(response, speaker_id=speaker, speed=speed)
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description="Chat with GPT and read responses aloud using VOICEVOX",
+    )
+    parser.add_argument(
+        "--speaker",
+        type=int,
+        default=1,
+        help="VOICEVOX speaker ID",
+    )
+    parser.add_argument(
+        "--speed",
+        type=float,
+        default=None,
+        help="Speed scale for speech (1.0 is normal)",
+    )
+    args = parser.parse_args()
+
     system_prompt = input("システムプロンプトを入力してください (空でスキップ): ")
     if system_prompt:
         set_system_prompt(system_prompt)
@@ -52,4 +82,4 @@ if __name__ == "__main__":
             reset_history()
             print("[履歴をリセットしました]")
             continue
-        chat_and_speak(user_input)
+        chat_and_speak(user_input, speaker=args.speaker, speed=args.speed)
