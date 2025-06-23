@@ -12,6 +12,7 @@ def speak_with_voicevox(
     *,
     speaker_id: int = 1,
     host: str = "http://127.0.0.1:50021",
+    speed: float | None = None,
 ) -> None:
     """Synthesis ``text`` with VOICEVOX and play the resulting audio.
 
@@ -23,6 +24,9 @@ def speak_with_voicevox(
         Identifier of the VOICEVOX speaker. ``1`` corresponds to 四国めたん.
     host:
         VOICEVOX engine host URL.
+    speed:
+        Optional speed scale. ``1.0`` is normal speed. Values greater than
+        ``1.0`` are faster and values less than ``1.0`` are slower.
     """
 
     # 1. 音声合成用クエリ作成
@@ -31,6 +35,9 @@ def speak_with_voicevox(
     )
     query_response.raise_for_status()
     audio_query = query_response.json()
+
+    if speed is not None:
+        audio_query["speedScale"] = speed
 
     # 2. 音声データ生成
     synthesis_response = requests.post(
