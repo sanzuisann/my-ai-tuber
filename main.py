@@ -33,8 +33,6 @@ def chat_and_speak(prompt: str):
 
     # Show typing effect and update chat_output.txt
 
-    show_typing_effect(response)
-
     # After the whole text is written start speaking
     speak_with_voicevox(response)
 
