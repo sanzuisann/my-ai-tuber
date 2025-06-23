@@ -4,7 +4,7 @@ This project chats with GPT and reads the response aloud using VOICEVOX.
 
 ## Setup
 
-1. Install dependencies (``obsws-python`` is now required):
+1. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
@@ -13,9 +13,6 @@ This project chats with GPT and reads the response aloud using VOICEVOX.
    OPENAI_API_KEY=your_openai_api_key
    ```
 3. Start the VOICEVOX engine so that it listens on `http://127.0.0.1:50021`.
-4. Prepare OBS with the obs-websocket plugin enabled on port ``4455`` and
-   password ``yuki123``. The text source that displays replies must be named
-   ``ChatText``.
 
 ## Usage
 
@@ -30,12 +27,15 @@ contents.
 After that, type your prompt. The last 10 messages are kept as context and
 the reply from ChatGPT will be spoken aloud. Each response is limited to
 200 tokens.
-Responses will also appear sequentially in OBS.
-The ``update_obs_text`` utility in ``obs_utils.py`` can be used independently
-to set the ``ChatText`` source from other scripts:
+
+### Adjusting speaking speed
+
+You can change how fast the audio is spoken by passing a ``speed`` value to
+``speak_with_voicevox``. For example, ``speed=1.2`` will speak about 20% faster:
 
 ```python
-from obs_utils import update_obs_text
+from speak_with_voicevox import speak_with_voicevox
 
-update_obs_text("Hello OBS!")
+speak_with_voicevox("こんにちは", speed=1.2)
 ```
+
