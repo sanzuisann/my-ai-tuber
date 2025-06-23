@@ -20,6 +20,10 @@ Run the main script:
 ```bash
 python main.py
 ```
+You can optionally pass a VOICEVOX speaker ID and speaking speed:
+```bash
+python main.py --speaker 8 --speed 1.2
+```
 If a `system_prompt.txt` file exists in the repository root, its contents will
 be used as the system prompt automatically. You'll still be prompted for an
 optional system prompt when the script starts, which can override the file
